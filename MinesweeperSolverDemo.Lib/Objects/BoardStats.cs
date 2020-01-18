@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MinesweeperSolverDemo.Lib.Objects
+﻿namespace MinesweeperSolverDemo.Lib.Objects
 {
     public class BoardStats
     {

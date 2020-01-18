@@ -1,18 +1,17 @@
-﻿using MinesweeperSolverDemo.Lib.Objects;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MinesweeperSolverDemo.Lib.Enums;
+using MinesweeperSolverDemo.Lib.Objects;
 
 namespace MinesweeperSolverDemo.Lib.Solver
 {
     public class MultiGameSolver : GameSolver
     {
-        public int BoardWidth { get; set; }
-        public int BoardHeight { get; set; }
-        public int MinesCount { get; set; }
-        public int BoardsCount { get; set; }
+        public int BoardWidth { get; }
+        public int BoardHeight { get; }
+        public int MinesCount { get; }
+        public int BoardsCount { get; }
 
         public int GamesCompleted { get; set; }
         public int GamesFailed { get; set; }
@@ -52,39 +51,39 @@ namespace MinesweeperSolverDemo.Lib.Solver
 
         public void Run()
         {
-            Random rand = new Random();
+            Random random = new Random();
             List<BoardStats> stats = new List<BoardStats>();
             Console.WriteLine("Solving Games...");
             for(int i = 0; i < BoardsCount; i++)
             {
                 GameBoard board = new GameBoard(BoardWidth, BoardHeight, MinesCount);
-                SingleGameSolver solver = new SingleGameSolver(board, rand);
+                SingleGameSolver solver = new SingleGameSolver(board, random);
                 var boardStats = solver.Solve();
                 stats.Add(boardStats);
 
-                if(solver.Board.Status == Enums.GameStatus.Completed)
+                if(solver.Board.Status == GameStatus.Completed)
                 {
                     GamesCompleted++;
                 }
-                else if(solver.Board.Status == Enums.GameStatus.Failed)
+                else if(solver.Board.Status == GameStatus.Failed)
                 {
                     GamesFailed++;
                 }
             }
 
-            Console.WriteLine("Games Completed: " + GamesCompleted.ToString());
-            Console.WriteLine("Games Failed: " + GamesFailed.ToString());
+            Console.WriteLine("Games Completed: " + GamesCompleted);
+            Console.WriteLine("Games Failed: " + GamesFailed);
 
             //Calculate stats
             var totalMines = stats.Sum(x => x.Mines);
             var totalFlaggedMines = stats.Sum(x => x.FlaggedMinePanels);
             var totalFlaggedMinesPercent = Math.Round(((totalFlaggedMines / totalMines) * 100F), 2);
-            Console.WriteLine("Mines Flagged: " + totalFlaggedMinesPercent.ToString() + "%");
+            Console.WriteLine("Mines Flagged: " + totalFlaggedMinesPercent + "%");
 
             var totalPanels = stats.Sum(x => x.TotalPanels);
             var revealedPanels = stats.Sum(x => x.PanelsRevealed);
             var totalRevealedPanelsPercent = Math.Round((revealedPanels / totalPanels) * 100F, 2);
-            Console.WriteLine("Panels Revealed: " + totalRevealedPanelsPercent.ToString() + "%");
+            Console.WriteLine("Panels Revealed: " + totalRevealedPanelsPercent + "%");
         }
     }
 }

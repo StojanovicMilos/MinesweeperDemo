@@ -1,21 +1,18 @@
 ﻿using MinesweeperSolverDemo.Lib.Objects;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MinesweeperSolverDemo.Lib.Solver
 {
     public class SingleGameSolver : GameSolver
     {
-        public GameBoard Board { get; set; }
+        public GameBoard Board { get; }
 
-        public Random Random { get; set; }
+        public Random Random { get; }
 
-        public SingleGameSolver(Random rand)
+        public SingleGameSolver(Random random)
         {
-            Random = rand;
+            Random = random;
             int height = 0, width = 0, mines = 0;
             while (width <= 0)
             {
@@ -93,12 +90,12 @@ namespace MinesweeperSolverDemo.Lib.Solver
 
         public void RandomMove()
         {
-            var randomID = Random.Next(1, Board.Panels.Count);
-            var panel = Board.Panels.First(x => x.ID == randomID);
+            var randomId = Random.Next(1, Board.Panels.Count);
+            var panel = Board.Panels.First(x => x.Id == randomId);
             while(panel.IsRevealed || panel.IsFlagged)
             {
-                randomID = Random.Next(1, Board.Panels.Count);
-                panel = Board.Panels.First(x => x.ID == randomID);
+                randomId = Random.Next(1, Board.Panels.Count);
+                panel = Board.Panels.First(x => x.Id == randomId);
             }
 
             Board.RevealPanel(panel.X, panel.Y);

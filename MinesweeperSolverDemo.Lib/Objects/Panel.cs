@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MinesweeperSolverDemo.Lib.Objects
+﻿namespace MinesweeperSolverDemo.Lib.Objects
 {
     public class Panel
     {
-        public int ID { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
+        public int Id { get; }
+        public int X { get; }
+        public int Y { get; }
         public bool IsMine { get; set; }
         public int AdjacentMines { get; set; }
         public bool IsRevealed { get; set; }
@@ -18,7 +12,7 @@ namespace MinesweeperSolverDemo.Lib.Objects
 
         public Panel(int id, int x, int y)
         {
-            ID = id;
+            Id = id;
             X = x;
             Y = y;
         }

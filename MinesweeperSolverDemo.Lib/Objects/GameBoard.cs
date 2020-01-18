@@ -2,21 +2,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MinesweeperSolverDemo.Lib.Objects
 {
     public class GameBoard
     {
-        public int Width { get; set; }
-        public int Height { get; set; }
-        public int MineCount { get; set; }
-        public List<Panel> Panels { get; set; }
-        public GameStatus Status { get; set; }
-
-        public double PercentMinesFlagged { get; set; }
-        public double PercentPanelsRevealed { get; set; }
+        public int Width { get; }
+        public int Height { get; }
+        public int MineCount { get; }
+        public List<Panel> Panels { get; }
+        public GameStatus Status { get; private set; }
 
         public GameBoard(int width, int height, int mines)
         {
@@ -83,12 +78,12 @@ namespace MinesweeperSolverDemo.Lib.Objects
 
             //Select random panels from set which are not excluded
             var mineList = Panels.Except(neighbors).OrderBy(user => rand.Next()); 
-            var mineSlots = mineList.Take(MineCount).ToList().Select(z => new { z.X, z.Y });
+            var mineCoordinates = mineList.Take(MineCount).ToList().Select(z => new { z.X, z.Y });
 
             //Place the mines
-            foreach (var mineCoord in mineSlots)
+            foreach (var mineCoordinate in mineCoordinates)
             {
-                Panels.Single(panel => panel.X == mineCoord.X && panel.Y == mineCoord.Y).IsMine = true;
+                Panels.Single(panel => panel.X == mineCoordinate.X && panel.Y == mineCoordinate.Y).IsMine = true;
             }
 
             //For every panel which is not a mine, determine and save the adjacent mines.
@@ -166,8 +161,8 @@ namespace MinesweeperSolverDemo.Lib.Objects
 
         private void CompletionCheck()
         {
-            var hiddenPanels = Panels.Where(x => !x.IsRevealed).Select(x => x.ID);
-            var minePanels = Panels.Where(x => x.IsMine).Select(x => x.ID);
+            var hiddenPanels = Panels.Where(x => !x.IsRevealed).Select(x => x.Id);
+            var minePanels = Panels.Where(x => x.IsMine).Select(x => x.Id);
             if (!hiddenPanels.Except(minePanels).Any())
             {
                 Status = GameStatus.Completed;
@@ -176,17 +171,14 @@ namespace MinesweeperSolverDemo.Lib.Objects
 
         public BoardStats GetStats()
         {
-            BoardStats stats = new BoardStats();
+            BoardStats stats = new BoardStats {Mines = Panels.Count(x => x.IsMine), FlaggedMinePanels = Panels.Count(x => x.IsMine && x.IsFlagged)};
 
-            stats.Mines = Panels.Count(x => x.IsMine);
-            stats.FlaggedMinePanels = Panels.Count(x => x.IsMine && x.IsFlagged);
-
-            stats.PercentMinesFlagged = Math.Round((double)(stats.FlaggedMinePanels / stats.Mines) * 100, 2);
+            stats.PercentMinesFlagged = Math.Round(stats.FlaggedMinePanels / stats.Mines * 100, 2);
 
             stats.TotalPanels = Panels.Count;
             stats.PanelsRevealed = Panels.Count(x => x.IsFlagged || x.IsRevealed);
 
-            stats.PercentPanelsRevealed = Math.Round((double)(stats.PanelsRevealed / stats.TotalPanels) * 100, 2);
+            stats.PercentPanelsRevealed = Math.Round(stats.PanelsRevealed / stats.TotalPanels * 100, 2);
 
             return stats;
         }

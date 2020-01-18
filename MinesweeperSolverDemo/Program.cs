@@ -1,23 +1,19 @@
-﻿using MinesweeperSolverDemo.Lib.Enums;
-using MinesweeperSolverDemo.Lib.Objects;
-using MinesweeperSolverDemo.Lib.Solver;
+﻿using MinesweeperSolverDemo.Lib.Solver;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MinesweeperSolverDemo
 {
-    class Program
+    public static class Program
     {
-        static void Main(string[] args)
+        public static void Main()
         {
             char input = 'S';
             while (input != 'Q')
             {
                 RunTypeCommands();
 
+                // ReSharper disable once PossibleNullReferenceException
                 input = Console.ReadLine().ToUpper().First();
 
                 if (input == 'P')
@@ -93,7 +89,7 @@ namespace MinesweeperSolverDemo
                         //Get Horizontal Coordinate
                         Console.WriteLine("Enter horizontal coordinate:");
                         string xEntered = Console.ReadLine();
-                        bool isValid = int.TryParse(xEntered, out x);
+                        int.TryParse(xEntered, out x);
                         CoordinateErrors(x);
                     }
 
@@ -101,7 +97,7 @@ namespace MinesweeperSolverDemo
                     {
                         Console.WriteLine("Enter vertical coordinate:");
                         string yEntered = Console.ReadLine();
-                        bool isValid = int.TryParse(yEntered, out y);
+                        int.TryParse(yEntered, out y);
                         CoordinateErrors(y);
                     }
                     solver.Board.RevealPanel(x, y);
@@ -117,6 +113,7 @@ namespace MinesweeperSolverDemo
                     }
                 }
 
+                // ReSharper disable once PossibleNullReferenceException
                 input = Console.ReadLine().ToUpper().First();
 
                 if (input == 'N')
@@ -126,13 +123,13 @@ namespace MinesweeperSolverDemo
             }
         }
 
-        private static void CoordinateErrors(int coord)
+        private static void CoordinateErrors(int coordinate)
         {
-            if (coord == 0)
+            if (coordinate == 0)
             {
                 Console.WriteLine("Please enter a value greater than 0.");
             }
-            else if (coord < 0)
+            else if (coordinate < 0)
             {
                 Console.WriteLine("Please enter a valid positive integer.");
             }
